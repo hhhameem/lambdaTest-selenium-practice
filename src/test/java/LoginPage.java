@@ -17,7 +17,7 @@ public class LoginPage {
     @FindBy(id = "submit")
     WebElement btnlogin;
 
-    public String doSuccessfulLogin(String email, String password) throws InterruptedException {
+    public String doLogin(String email, String password) throws InterruptedException {
         driver.get("https://phptravels.net/admin/login.php");
         inputEmail.sendKeys(email);
         Thread.sleep(1000);

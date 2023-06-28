@@ -1,24 +1,24 @@
 <!DOCTYPE suite SYSTEM "http://testng.org/testng-1.0.dtd" >
-<suite thread-count="3" verbose="1" name="Cloud test in LambdaTest" parallel="tests">
-    <test name="Test in windows 11 and chrome version 113">
-        <parameter name="browser" value="chrome"/>
-        <parameter name="version" value="101.0"/>
-        <parameter name="platform" value="macOS Monterey"/>
+<suite thread-count="2" verbose="1" name="Cloud test in LambdaTest" parallel="tests">
+    <test name="Login in windows 10 and edge version 114">
+        <parameter name="browser" value="edge"/>
+        <parameter name="version" value="latest"/>
+        <parameter name="platform" value="Windows 10"/>
         <classes>
             <class name="LoginTestRunner"/>
         </classes>
     </test>
-    <test name="Test in windows 11 and firefox version 110.0">
+    <test name="Login in windows 10 and firefox version 110.0">
         <parameter name="browser" value="firefox"/>
         <parameter name="version" value="110.0"/>
-        <parameter name="platform" value="Windows 11"/>
+        <parameter name="platform" value="Windows 10"/>
         <classes>
             <class name="LoginTestRunner"/>
         </classes>
     </test>
-    <test name="Test in windows 10 and edge version 112">
-        <parameter name="browser" value="edge"/>
-        <parameter name="version" value="112.0"/>
+    <test name="Login in windows 10 and chrome version latest">
+        <parameter name="browser" value="chrome"/>
+        <parameter name="version" value="latest"/>
         <parameter name="platform" value="Windows 10"/>
         <classes>
             <class name="LoginTestRunner"/>

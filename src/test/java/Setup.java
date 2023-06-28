@@ -4,9 +4,8 @@ import org.openqa.selenium.chrome.ChromeOptions;
 import org.openqa.selenium.edge.EdgeOptions;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
-import org.testng.annotations.AfterClass;
-import org.testng.annotations.BeforeClass;
-import org.testng.annotations.Parameters;
+import org.testng.ITestContext;
+import org.testng.annotations.*;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -18,11 +17,12 @@ public class Setup {
     public String lambdatestAccesskey= dotenv.get("lambdatestAccesskey");
     public static RemoteWebDriver driver = null;
     public String gridURL = "@hub.lambdatest.com/wd/hub";
+    public String status = "";
 
 
-    @BeforeClass
+    @BeforeTest
     @Parameters(value={"browser","version","platform"})
-    public void InitDriver(String browser, String version, String platform) {
+    public void InitDriver(ITestContext testContext, String browser, String version, String platform) {
 
         MutableCapabilities browserOptions;
 
@@ -49,10 +49,11 @@ public class Setup {
         ltOptions.put("timezone", "Dhaka");
         ltOptions.put("build", "LambdaTestBuild-1.1.0");
         ltOptions.put("project", "phptravels-login-lambdaTest");
-        ltOptions.put("name", "phptravels-login-automation");
+        ltOptions.put("name", testContext.getCurrentXmlTest().getName());
         ltOptions.put("console", "true");
         ltOptions.put("w3c", true);
         browserOptions.setCapability("LT:Options", ltOptions);
+
         try {
             driver = new RemoteWebDriver(new URL("https://" + lambdatestUsername + ":" + lambdatestAccesskey + gridURL), browserOptions);
         } catch (MalformedURLException e) {
@@ -62,9 +63,15 @@ public class Setup {
         }
     }
 
-    @AfterClass
+    @AfterMethod
+    public void setStatus() {
+        driver.executeScript("lambda-status=" + status);
+    }
+
+    @AfterTest
     public void CloseDriver() {
         if (driver != null) {
+            System.out.println("quiting driver........");
             driver.quit();
         }
     }
