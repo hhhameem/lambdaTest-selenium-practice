@@ -1,17 +1,15 @@
 import io.github.cdimascio.dotenv.Dotenv;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.MutableCapabilities;
 import org.openqa.selenium.chrome.ChromeOptions;
-import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.edge.EdgeOptions;
+import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.remote.RemoteWebDriver;
 import org.testng.annotations.AfterClass;
 import org.testng.annotations.BeforeClass;
-import org.testng.annotations.BeforeTest;
 import org.testng.annotations.Parameters;
 
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.time.Duration;
 import java.util.HashMap;
 
 public class Setup {
@@ -23,10 +21,25 @@ public class Setup {
 
 
     @BeforeClass
-    public void InitDriver() {
-        ChromeOptions browserOptions = new ChromeOptions();
-        browserOptions.setPlatformName("Windows 10");
-        browserOptions.setBrowserVersion("114.0");
+    @Parameters(value={"browser","version","platform"})
+    public void InitDriver(String browser, String version, String platform) {
+
+        MutableCapabilities browserOptions;
+
+        if (browser.equalsIgnoreCase("chrome")) {
+            browserOptions = new ChromeOptions();
+        } else if (browser.equalsIgnoreCase("firefox")) {
+            browserOptions = new FirefoxOptions();
+        } else if (browser.equalsIgnoreCase("edge")) {
+            browserOptions = new EdgeOptions();
+        } else {
+            System.out.println("Invalid browser specified");
+            return;
+        }
+
+        browserOptions.setCapability("browserVersion", version);
+        browserOptions.setCapability("platformName", platform);
+
         HashMap<String, Object> ltOptions = new HashMap<String, Object>();
         ltOptions.put("username", lambdatestUsername);
         ltOptions.put("accessKey", lambdatestAccesskey);
@@ -36,7 +49,7 @@ public class Setup {
         ltOptions.put("timezone", "Dhaka");
         ltOptions.put("build", "LambdaTestBuild-1.1.0");
         ltOptions.put("project", "phptravels-login-lambdaTest");
-        ltOptions.put("name", "phptravels-successful-login");
+        ltOptions.put("name", "phptravels-login-automation");
         ltOptions.put("console", "true");
         ltOptions.put("w3c", true);
         browserOptions.setCapability("LT:Options", ltOptions);
